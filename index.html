@@ -21,31 +21,34 @@
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
         }
-        h1 { color: #d63384; font-size: 2rem; }
-        .buttons { margin-top: 30px; position: relative; height: 100px; }
+        h1 { color: #d63384; font-size: 1.8rem; min-height: 80px; }
+        .buttons { margin-top: 30px; position: relative; height: 150px; }
         button {
             padding: 15px 30px;
             font-size: 1.2rem;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s ease;
         }
-        #yesBtn { background-color: #ff4d6d; color: white; margin-right: 20px; }
+        #yesBtn { background-color: #ff4d6d; color: white; }
         #noBtn {
             background-color: #6c757d;
             color: white;
             position: absolute;
+            left: 55%; /* Initial position */
         }
         .hidden { display: none; }
-        img { width: 150px; margin-bottom: 10px; }
+        img { width: 150px; margin-bottom: 10px; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainCard">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp3bm53Z3R3bm53Z3R3bm53Z3R3bm53Z3R3bm53Z3R3bm53JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute GIF">
+    <div class="container" id="quizCard">
+        <img id="displayGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp3bm53Z3R3bm53Z3R3bm53Z3R3bm53Z3R3bm53Z3R3bm53JmVwPXYxX2ludGVybmFsX2dpZl9ieV9iZCZjdD1z/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute GIF">
         <h1 id="questionText">Purnima, will you be mine forever? ❤️</h1>
         <div class="buttons">
             <button id="yesBtn">Yes</button>
@@ -56,28 +59,58 @@
     <div class="container hidden" id="successCard">
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp3bm53Z3R3bm53Z3R3bm53Z3R3bm53Z3R3bm53Z3R3bm53JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/26FLdmIp6wJr91JAI/giphy.gif" alt="Happy GIF">
         <h1>I knew it! Love you the most! 💖</h1>
-        <p>Can't wait for our life together!</p>
+        <p>30th April ka intezar nahi ho raha! 💍</p>
     </div>
 
     <script>
+        const questions = [
+            "Purnima, will you be mine forever? ❤️",
+            "Kya aap hamesha mere gusse ko handle karogi? 🥺",
+            "Next trip par kya hum Uzbekistan chalein? ✈️",
+            "Kya aap 30 April ko duniya ki sabse sundar dulhan banogi? 👰",
+            "Ek last baar... do you love me the most? 🥰"
+        ];
+
+        let currentQuestionIndex = 0;
+
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
-        const mainCard = document.getElementById('mainCard');
+        const questionText = document.getElementById('questionText');
+        const quizCard = document.getElementById('quizCard');
         const successCard = document.getElementById('successCard');
 
-        // Mouseover event for No button to run away
-        noBtn.addEventListener('mouseover', () => {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+        // Function to move 'No' button
+        function moveNoButton() {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 50);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 50);
             
+            noBtn.style.position = 'fixed';
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
+        }
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
         });
 
         // Click event for Yes button
         yesBtn.addEventListener('click', () => {
-            mainCard.classList.add('hidden');
-            successCard.classList.remove('hidden');
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                // Update to next question
+                questionText.innerText = questions[currentQuestionIndex];
+                // Reset No button position for next round
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = '55%';
+                noBtn.style.top = 'auto';
+            } else {
+                // Show final card
+                quizCard.classList.add('hidden');
+                successCard.classList.remove('hidden');
+            }
         });
     </script>
 </body>
